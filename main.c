@@ -9,7 +9,7 @@ int file_exists(const char *filepath) {
 }
 
 int main(void) {
-    const char *filepath = "C:/Dev/www/rarassword/data.rar";
+    const char *filepath = "C:/rarassword/data.rar";
 
     if (!file_exists(filepath)) {
         printf("The system cannot find the specified path: %s\n", filepath);
@@ -17,19 +17,19 @@ int main(void) {
     }
 
     const char *start[] = {
-            "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve", "diez",
+            "a", "A", ""
     };
 
     const char *other[] = {
-            ".", "@", "%"
+            ".", "@", "%", ".@", "@.", ""
     };
 
     const char *other2[] = {
-            "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r",
+            "1", "2", ""
     };
 
     const char *end[] = {
-            ".", "@", "%"
+            "", "", ".", "@", "%", ".@", "@."
     };
 
     size_t numStart = sizeof(start) / sizeof(start[0]);
@@ -46,21 +46,17 @@ int main(void) {
                     char pass[100];
                     snprintf(pass, sizeof(pass), "%s%s%s%s", start[i], other[j], other2[k], end[l]);
 
-                    printf("Testing password: %s\n", pass);
-
                     char command[500];
-                    snprintf(command, sizeof(command), "unrar t -p\"%s\" \"%s\"", pass, filepath);
-
-                    printf("Executing command: %s\n", command);
+                    snprintf(command, sizeof(command), "unrar t -p\"%s\" \"%s\" 2>nul 1>nul", pass, filepath);
 
                     int return_var = system(command);
 
                     if (return_var == 0) {
-                        printf("Password is correct: %s\n", pass);
+                        printf("\033[32mPassword is correct: %s\033[0m\n", pass);
                         password_correct = 1;
                         break;
                     } else {
-                        printf("Command returned error code: %d\n", return_var);
+                        printf("\033[31mIncorrect password: %s\033[0m\n", pass);
                     }
                 }
             }
